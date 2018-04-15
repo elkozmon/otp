@@ -11,10 +11,7 @@ def prepare_key(key):
 
 
 def reduce(txt_char, key_char, binop):
-    txt_char = ord(txt_char) - 65
-    key_char = ord(key_char) - 65
-
-    letter = binop(txt_char, key_char)
+    letter = binop(ord(txt_char), ord(key_char))
     letter %= 26
     letter += 65
 
