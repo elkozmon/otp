@@ -1,13 +1,6 @@
+import re
 import sys
 import getpass
-
-
-def prepare_txt(txt):
-    return "".join(filter(str.isalpha, txt)).upper()
-
-
-def prepare_key(key):
-    return key.upper()
 
 
 def reduce(txt_char, key_char, binop):
@@ -31,6 +24,12 @@ def decrypt(txt, key):
 
 
 def validate(txt, key):
+    if re.search("[^A-Z]", txt) is not None:
+        raise Exception(f"txt can only contain uppercase letters ('{txt}')")
+
+    if re.search("[^A-Z]", key) is not None:
+        raise Exception(f"key can only contain uppercase letters ('{key}')")
+
     len_txt = len(txt)
     len_key = len(key)
 
@@ -47,10 +46,9 @@ def main():
         txt = getpass.getpass("Enter text:")
         key = "".join(key_file.read().splitlines())
 
-        txt = prepare_txt(txt=txt)
-        key = prepare_key(key=key)
-
         if validate(txt=txt, key=key):
+            key = key[:len(txt)]
+
             if mode == "e":
                 print(f"Encrypting '{txt}' with key '{key}'", file=sys.stderr)
                 print(encrypt(txt=txt, key=key), file=sys.stdout)
