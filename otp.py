@@ -46,9 +46,10 @@ def main():
         txt = getpass.getpass("Enter text:")
         key = "".join(key_file.read().splitlines())
 
-        if validate(txt=txt, key=key):
-            key = key[:len(txt)]
+        key_offset = int(sys.argv[3])
+        key = key[key_offset:key_offset + len(txt)]
 
+        if validate(txt=txt, key=key):
             if mode == "e":
                 print(f"Encrypting '{txt}' with key '{key}'", file=sys.stderr)
                 print(encrypt(txt=txt, key=key), file=sys.stdout)
