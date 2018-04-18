@@ -1,34 +1,36 @@
-import re
 import sys
 import getpass
+import argparse
 
 
-def reduce(txt_char, key_char, binop):
-    letter = binop(ord(txt_char), ord(key_char))
-    letter %= 26
-    letter += 65
+def reduce(txt_char, key_char, charset, binop):
+    letter = binop(charset.index(txt_char), charset.index(key_char))
+    letter %= len(charset)
 
-    return chr(letter)
-
-
-def opcrypt(txt, key, binop):
-    return "".join(reduce(txt_char=i, key_char=j, binop=binop) for (i, j) in zip(txt, key))
+    return charset[letter]
 
 
-def encrypt(txt, key):
-    return opcrypt(txt=txt, key=key, binop=int.__add__)
+def opcrypt(txt, key, charset, binop):
+    return "".join(reduce(txt_char=i, key_char=j, charset=charset, binop=binop) for (i, j) in zip(txt, key))
 
 
-def decrypt(txt, key):
-    return opcrypt(txt=txt, key=key, binop=int.__sub__)
+def encrypt(txt, key, charset):
+    return opcrypt(txt=txt, key=key, charset=charset, binop=int.__add__)
 
 
-def validate(txt, key):
-    if re.search("[^A-Z]", txt) is not None:
-        raise Exception(f"txt can only contain uppercase letters ('{txt}')")
+def decrypt(txt, key, charset):
+    return opcrypt(txt=txt, key=key, charset=charset, binop=int.__sub__)
 
-    if re.search("[^A-Z]", key) is not None:
-        raise Exception(f"key can only contain uppercase letters ('{key}')")
+
+def validate(txt, key, charset):
+    txt_set_diff = set(txt).difference(charset)
+    key_set_diff = set(key).difference(charset)
+
+    if len(txt_set_diff) > 0:
+        raise Exception(f"txt contains illegal characters {txt_set_diff}")
+
+    if len(key_set_diff) > 0:
+        raise Exception(f"key contains illegal characters {key_set_diff}")
 
     len_txt = len(txt)
     len_key = len(key)
@@ -40,24 +42,35 @@ def validate(txt, key):
 
 
 def main():
-    mode = sys.argv[1]
+    parser = argparse.ArgumentParser(description="One-time pad")
+    parser.add_argument("-c", "--charset", help="path to charset file; pick required minimum", required=True)
+    parser.add_argument("-k", "--keyfile", help="path to the key file", required=True)
+    parser.add_argument("-o", "--offset", help="key offset; defaults to 0", type=int, default=0)
 
-    with open(sys.argv[2], "r") as key_file:
-        txt = getpass.getpass("Enter text:")
-        key = "".join(key_file.read().splitlines())
+    mode_group = parser.add_mutually_exclusive_group(required=True)
+    mode_group.add_argument("-e", action='store_true', help="encrypt")
+    mode_group.add_argument("-d", action='store_true', help="decrypt")
 
-        key_offset = int(sys.argv[3])
-        key = key[key_offset:key_offset + len(txt)]
+    args = parser.parse_args()
 
-        if validate(txt=txt, key=key):
-            if mode == "e":
-                print(f"Encrypting '{txt}' with key '{key}'", file=sys.stderr)
-                print(encrypt(txt=txt, key=key), file=sys.stdout)
-            elif mode == "d":
-                print(f"Decrypting '{txt}' with key '{key}'", file=sys.stderr)
-                print(decrypt(txt=txt, key=key), file=sys.stdout)
-            else:
-                raise Exception(f"bad mode '{mode}'")
+    with open(args.charset, "r") as charset_file:
+        charset = "".join(charset_file.read().splitlines())
+
+        with open(args.keyfile, "r") as key_file:
+            txt = getpass.getpass("Enter text:")
+
+            key = "".join(key_file.read().splitlines())
+            key = key[args.offset:args.offset + len(txt)]
+
+            if validate(txt=txt, key=key, charset=charset):
+                if args.e:
+                    print(f"Encrypting '{txt}' with key '{key}'", file=sys.stderr)
+                    print(encrypt(txt=txt, key=key, charset=charset), file=sys.stdout)
+                elif args.d:
+                    print(f"Decrypting '{txt}' with key '{key}'", file=sys.stderr)
+                    print(decrypt(txt=txt, key=key, charset=charset), file=sys.stdout)
+                else:
+                    raise Exception(f"bad mode")
 
 
 if __name__ == '__main__':
