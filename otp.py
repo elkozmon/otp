@@ -63,6 +63,7 @@ def get_key(file):
 def main():
     parser = argparse.ArgumentParser(description="One-time pad")
 
+    parser.add_argument("-v", "--verbose", action='store_true')
     parser.add_argument("-c", "--charsetfile", required=True,
                         help="path to charset file; pick required minimum")
     parser.add_argument("-k", "--keyfile", required=True,
@@ -87,10 +88,12 @@ def main():
 
     if validate(txt=txt, key=key, charset=charset):
         if args.e:
-            print("Encrypting '%s' with key '%s'" % (txt, key), file=sys.stderr)
+            if args.verbose:
+                print("Encrypting '%s' with key '%s'" % (txt, key), file=sys.stderr)
             print(encrypt(txt=txt, key=key, charset=charset), file=sys.stdout)
         elif args.d:
-            print("Decrypting '%s' with key '%s'" % (txt, key), file=sys.stderr)
+            if args.verbose:
+                print("Decrypting '%s' with key '%s'" % (txt, key), file=sys.stderr)
             print(decrypt(txt=txt, key=key, charset=charset), file=sys.stdout)
         else:
             parser.print_help()

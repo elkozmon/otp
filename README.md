@@ -2,7 +2,7 @@
 
 ```
 $ python otp.py -h
-usage: otp.py [-h] -c CHARSETFILE -k KEYFILE [-o OFFSET] (-e | -d) TXTFILE
+usage: otp.py [-h] [-v] -c CHARSETFILE -k KEYFILE [-o OFFSET] (-e | -d) TXTFILE
 
 One-time pad
 
@@ -12,6 +12,7 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  -v, --verbose
   -c CHARSETFILE, --charsetfile CHARSETFILE
                         path to charset file; pick required minimum
   -k KEYFILE, --keyfile KEYFILE
