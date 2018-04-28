@@ -36,7 +36,7 @@ def validate(txt, key, charset):
     len_key = len(key)
 
     if len_key < len_txt:
-        raise Exception(f"key too short ({len_key}) for given txt ({len_txt})")
+        raise Exception("key too short (%d) for given txt (%d)" % (len_key, len_txt))
 
     return True
 
@@ -64,13 +64,13 @@ def main():
 
             if validate(txt=txt, key=key, charset=charset):
                 if args.e:
-                    print(f"Encrypting '{txt}' with key '{key}'", file=sys.stderr)
+                    print("Encrypting '%s' with key '%s'" % (txt, key), file=sys.stderr)
                     print(encrypt(txt=txt, key=key, charset=charset), file=sys.stdout)
                 elif args.d:
-                    print(f"Decrypting '{txt}' with key '{key}'", file=sys.stderr)
+                    print("Decrypting '%s' with key '%s'" % (txt, key), file=sys.stderr)
                     print(decrypt(txt=txt, key=key, charset=charset), file=sys.stdout)
                 else:
-                    raise Exception(f"bad mode")
+                    raise Exception("bad mode")
 
 
 if __name__ == '__main__':
