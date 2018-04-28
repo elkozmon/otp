@@ -60,7 +60,7 @@ def get_key(file):
         return "".join(key_file.read().splitlines())
 
 
-def main():
+def new_parser():
     parser = argparse.ArgumentParser(description="One-time pad")
 
     parser.add_argument("-v", "--verbose", action='store_true')
@@ -78,6 +78,11 @@ def main():
     parser.add_argument("txtfile", metavar='TXTFILE', action='store',
                         help="file with text to en/decrypt. use single dash '-' to read from stdin")
 
+    return parser
+
+
+def main():
+    parser = new_parser()
     args = parser.parse_args()
 
     charset = get_charset(args.charsetfile)
