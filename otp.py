@@ -47,7 +47,9 @@ def get_charset(file):
 
 def get_txt(file):
     if file == "-":
-        return sys.stdin.read()
+        txt = sys.stdin.read()
+        sys.stdout.write("\n")
+        return txt
     else:
         with open(file, "r") as txt_file:
             return "".join(txt_file.read().splitlines())
