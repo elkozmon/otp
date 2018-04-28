@@ -47,7 +47,7 @@ def get_charset(file):
 
 def get_txt(file):
     if file == "-":
-        return input("Enter text: ")
+        return sys.stdin.read()
     else:
         with open(file, "r") as txt_file:
             return "".join(txt_file.read().splitlines())
@@ -60,6 +60,7 @@ def get_key(file):
 
 def main():
     parser = argparse.ArgumentParser(description="One-time pad")
+
     parser.add_argument("-c", "--charsetfile", required=True,
                         help="path to charset file; pick required minimum")
     parser.add_argument("-k", "--keyfile", required=True,
