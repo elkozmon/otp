@@ -69,7 +69,7 @@ def main():
 
     mode_group = parser.add_mutually_exclusive_group(required=True)
     mode_group.add_argument("-e", action='store_true', help="encrypt")
-    mode_group.add_argument("-d", action='store_true',help="decrypt")
+    mode_group.add_argument("-d", action='store_true', help="decrypt")
 
     parser.add_argument("txtfile", metavar='TXTFILE', action='store',
                         help="file with text to en/decrypt. use single dash '-' to read from stdin")
