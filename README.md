@@ -34,3 +34,7 @@ echo -n HELLO | python otp.py -c charsets/alpha_ucase.set -k my_secret_key.txt -
 # prompt for input & encrypt
 python otp.py -c charsets/alpha_ucase.set -k my_secret_key.txt -e -
 ```
+
+## License
+
+The project is licensed under MIT License.
