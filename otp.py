@@ -48,7 +48,7 @@ def get_charset(file):
 def get_txt(file):
     if file == "-":
         txt = sys.stdin.read()
-        sys.stdout.write("\n")
+        sys.stderr.write("\n")
         return txt
     else:
         with open(file, "r") as txt_file:
@@ -63,7 +63,7 @@ def get_key(file):
 def new_parser():
     parser = argparse.ArgumentParser(description="One-time pad")
 
-    parser.add_argument("-v", "--verbose", action='store_true')
+    parser.add_argument("-v", "--verbose", action="store_true")
     parser.add_argument("-c", "--charsetfile", required=True,
                         help="path to charset file; pick required minimum")
     parser.add_argument("-k", "--keyfile", required=True,
@@ -72,10 +72,10 @@ def new_parser():
                         help="key offset; defaults to 0")
 
     mode_group = parser.add_mutually_exclusive_group(required=True)
-    mode_group.add_argument("-e", action='store_true', help="encrypt")
-    mode_group.add_argument("-d", action='store_true', help="decrypt")
+    mode_group.add_argument("-e", action="store_true", help="encrypt")
+    mode_group.add_argument("-d", action="store_true", help="decrypt")
 
-    parser.add_argument("txtfile", metavar='TXTFILE', action='store',
+    parser.add_argument("txtfile", metavar="TXTFILE", action="store",
                         help="file with text to en/decrypt. use single dash '-' to read from stdin")
 
     return parser
@@ -104,5 +104,5 @@ def main():
             parser.print_help()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

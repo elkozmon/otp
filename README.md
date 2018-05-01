@@ -31,9 +31,6 @@ python otp.py -c charsets/alpha_ucase.set -k my_secret_key.txt -e my_plaintext.t
 
 # read from stdin & encrypt
 echo -n HELLO | python otp.py -c charsets/alpha_ucase.set -k my_secret_key.txt -e -
-
-# prompt for input & encrypt
-python otp.py -c charsets/alpha_ucase.set -k my_secret_key.txt -e -
 ```
 
 ## License
